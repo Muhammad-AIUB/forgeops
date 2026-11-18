@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="560" viewBox="0 0 1440 560" role="img" aria-labelledby="title desc">
+<title id="title">ForgeOps planned workflow lifecycle</title>
+<desc id="desc">A planned workflow run: trigger, validation and policy check, durable run start, optional human approval, worker execution with retries, then audit and completion.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151b32"/></linearGradient>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#93a4c7"/></marker>
+  <style>
+    .h1{font:700 30px Inter,Arial,sans-serif;fill:#f8fafc}.sub{font:400 15px Inter,Arial,sans-serif;fill:#aab6d1}
+    .cardBlue{fill:#172e54;stroke:#3b82f6;stroke-width:1.5}.cardPurple{fill:#2b2050;stroke:#8b5cf6;stroke-width:1.5}.cardGreen{fill:#123b3a;stroke:#14b8a6;stroke-width:1.5}.cardAmber{fill:#3c2c17;stroke:#f59e0b;stroke-width:1.5}
+    .num{font:700 13px Inter,Arial,sans-serif;fill:#9fb0cf}.label{font:700 17px Inter,Arial,sans-serif;fill:#f8fafc}.small{font:400 13px Inter,Arial,sans-serif;fill:#c1cce2}.tiny{font:400 11px Inter,Arial,sans-serif;fill:#9fb0cf}
+    .arrow{fill:none;stroke:#93a4c7;stroke-width:2.2;marker-end:url(#arrow)}.dashed{fill:none;stroke:#60769d;stroke-width:1.5;stroke-dasharray:7 7;marker-end:url(#arrow)}
+  </style>
+</defs>
+<rect width="1440" height="560" rx="24" fill="url(#bg)"/>
+<text x="56" y="62" class="h1">ForgeOps · Planned Workflow Run Lifecycle</text>
+<text x="56" y="90" class="sub">Proposed design — durable runs, approval gates for sensitive steps, and an audit trail for every transition</text>
+
+<!-- Row 1 -->
+<rect x="56" y="130" width="280" height="110" rx="14" class="cardBlue"/>
+<text x="76" y="158" class="num">1</text>
+<text x="196" y="188" text-anchor="middle" class="label">Trigger</text>
+<text x="196" y="212" text-anchor="middle" class="small">Webhook · schedule · manual</text>
+
+<rect x="400" y="130" width="280" height="110" rx="14" class="cardPurple"/>
+<text x="420" y="158" class="num">2</text>
+<text x="540" y="188" text-anchor="middle" class="label">Validate &amp; authorize</text>
+<text x="540" y="212" text-anchor="middle" class="small">Permissions · policy · input checks</text>
+
+<rect x="744" y="130" width="280" height="110" rx="14" class="cardGreen"/>
+<text x="764" y="158" class="num">3</text>
+<text x="884" y="188" text-anchor="middle" class="label">Start durable run</text>
+<text x="884" y="212" text-anchor="middle" class="small">Versioned definition · Temporal</text>
+
+<rect x="1088" y="130" width="296" height="110" rx="14" class="cardAmber"/>
+<text x="1108" y="158" class="num">4</text>
+<text x="1236" y="188" text-anchor="middle" class="label">Approval gate</text>
+<text x="1236" y="212" text-anchor="middle" class="small">Only for protected actions</text>
+
+<path d="M336 185 H400" class="arrow"/>
+<path d="M680 185 H744" class="arrow"/>
+<path d="M1024 185 H1088" class="arrow"/>
+
+<!-- Connector to row 2 -->
+<path d="M1236 240 V290 H1236 V300" class="arrow"/>
+
+<!-- Row 2 (right to left) -->
+<rect x="1088" y="300" width="296" height="110" rx="14" class="cardBlue"/>
+<text x="1108" y="328" class="num">5</text>
+<text x="1236" y="358" text-anchor="middle" class="label">Execute on worker</text>
+<text x="1236" y="382" text-anchor="middle" class="small">Isolated, allow-listed operations</text>
+
+<rect x="744" y="300" width="280" height="110" rx="14" class="cardPurple"/>
+<text x="764" y="328" class="num">6</text>
+<text x="884" y="358" text-anchor="middle" class="label">Retry &amp; recover</text>
+<text x="884" y="382" text-anchor="middle" class="small">Timeouts · backoff · idempotency</text>
+
+<rect x="400" y="300" width="280" height="110" rx="14" class="cardGreen"/>
+<text x="420" y="328" class="num">7</text>
+<text x="540" y="358" text-anchor="middle" class="label">Record &amp; observe</text>
+<text x="540" y="382" text-anchor="middle" class="small">Logs · status · audit events</text>
+
+<rect x="56" y="300" width="280" height="110" rx="14" class="cardAmber"/>
+<text x="76" y="328" class="num">8</text>
+<text x="196" y="358" text-anchor="middle" class="label">Complete</text>
+<text x="196" y="382" text-anchor="middle" class="small">Succeeded · failed · cancelled</text>
+
+<path d="M1088 355 H1024" class="arrow"/>
+<path d="M744 355 H680" class="arrow"/>
+<path d="M400 355 H336" class="arrow"/>
+
+<!-- Rejection / retry paths -->
+<path d="M1236 410 V470 H884 V410" class="dashed"/>
+<text x="1060" y="492" text-anchor="middle" class="tiny">transient failure → retry</text>
+<path d="M540 130 V108 H196 V130" class="dashed"/>
+<text x="368" y="102" text-anchor="middle" class="tiny">rejected → audited, run not started</text>
+
+<text x="1380" y="540" text-anchor="end" class="tiny">Concept illustration · not an implemented or deployed system</text>
+</svg>
